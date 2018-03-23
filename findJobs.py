@@ -45,5 +45,5 @@ def findCareers(link,keyword, loc):
 
 def webCrawl(start_page, job_keyword, loc):
 	print "spawning thread"
-	thread.start_new_thread( findCareers, start_page, job_keyword, loc)
+	thread.start_new_thread( findCareers, (start_page, job_keyword, loc))
 	print "webcrawl return"
