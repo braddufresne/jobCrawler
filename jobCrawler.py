@@ -8,6 +8,8 @@ gmaps = googlemaps.Client(key=MY_API_KEY)
 
 ifh=open("locations","r")
 loc_name=ifh.readline()
+key="software"
+print "Searching keyword:", key
 
 while loc_name:
 	loc_name=loc_name[:-1]
@@ -23,7 +25,7 @@ while loc_name:
 
 	print "(", latitude, " ", longitude, ")"
 
-	places_list = gmaps.places_radar([latitude,longitude],1000,type=['establishment'])
+	places_list = gmaps.places_radar([latitude,longitude],1000,type=['establishment'],keyword=key)
 
 	num_places = len(places_list['results'])
 	print num_places, "locations found."
