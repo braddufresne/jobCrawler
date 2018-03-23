@@ -1,6 +1,6 @@
 import googlemaps, time, findJobs
 
-def businessSearch(loc_name, search_term, job_key):
+def businessSearch(loc_name, search_term, job_key, threads):
 	apifile = open("api key")
 	MY_API_KEY = apifile.readline()
 	MY_API_KEY=MY_API_KEY[:-1]
@@ -28,6 +28,6 @@ def businessSearch(loc_name, search_term, job_key):
 		deets = gmaps.place(current_id)
 		if 'establishment' in deets['result']['types']:
 			if 'website' in deets['result']:
-				findJobs.webCrawl(deets['results']['website'],job_key,loc_name)
+				findJobs.webCrawl(deets['results']['website'],job_key,loc_name, threads)
 		time.sleep(0.11)
 		count+=1

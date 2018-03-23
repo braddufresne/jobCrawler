@@ -1,19 +1,26 @@
-import sys, thread, Queue, re, urllib, urlparse, time, os, sys
+import sys, Queue, re, urllib, urlparse, time, os, sys
+from threading import Thread
 
 dupcheck = set()
 
 def saveCareers(link,key,loc):
+	print "job match found at ", link
 	filename="jobs/"
 	filename+=loc
 	filename+="-"
 	filename+=key
-	outfile=open(filename, "a")
+	if os.path.exists(filename):
+		append_write='a'
+	else:
+		append_write='w'
+	outfile=open(filename, append_write)
 	outfile.write(link)
 	outfile.write("\n")
 	outfile.close()
 
 def checkListing(link, keyword):
 	try:
+		print "career page found at", link
 		html = urllib.urlopen(link).read() 
 		matches = re.findall(keyword,html,re.I)
 		if len(matches) != 0:
@@ -37,13 +44,15 @@ def findCareers(link,keyword, loc):
     try:
 	print "crawling", link
 	html = urllib.urlopen(link).read() 
+	print "page = ", html
 	getCareers(html, link, keyword, loc) 
     except (KeyboardInterrupt, SystemExit): 
 	raise
     except Exception:
 	pass
 
-def webCrawl(start_page, job_keyword, loc):
+def webCrawl(start_page, job_keyword, loc, threads):
 	print "spawning thread"
-	thread.start_new_thread( findCareers, (start_page, job_keyword, loc))
+	threads.append(Thread( target=findCareers, args=(start_page, job_keyword, loc)))
+	threads[-1].start()
 	print "webcrawl return"

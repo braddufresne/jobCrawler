@@ -1,4 +1,7 @@
 import findBusinesses
+from threading import Thread
+
+threads=[]
 
 default_keyword='software'
 keyword=raw_input("Business search keyword [{}]:".format(default_keyword))
@@ -27,8 +30,11 @@ while loc_name:
 	filename+=keyword
 	outfile=open(filename, "w")
 	outfile.close()
-	findBusinesses.businessSearch(loc_name,keyword,jobkey)
+	findBusinesses.businessSearch(loc_name,keyword,jobkey,threads)
 	loc_name=loc_file.readline()
 
 
 loc_file.close()
+
+for t in threads:
+	t.join()
