@@ -1,48 +1,22 @@
-import googlemaps
-import time
+import findBusinesses, findJobs
 
-apifile = open("api key")
-MY_API_KEY = apifile.readline()
-MY_API_KEY=MY_API_KEY[:-1]
-gmaps = googlemaps.Client(key=MY_API_KEY)
+default_keyword='software'
+keyword=raw_input("Business search keyword [{}]:".format(default_keyword))
+if keyword=='':
+	keyword=default_keyword
 
-ifh=open("locations","r")
-loc_name=ifh.readline()
-key="software"
-print "Searching keyword:", key
+default_location_file='eastcoast'
+loc_file_name=raw_input("File with locations to search [ locations/{}]: locations/".format(default_location_file))
+if loc_file_name=='':
+	loc_file_name=default_location_file
+loc_file_name="locations/"+loc_file_name
+
+loc_file=open(loc_file_name,"r")
+loc_name=loc_file.readline()
 
 while loc_name:
 	loc_name=loc_name[:-1]
-	fp="websites/"
-	fp+=loc_name
-	fh = open(fp,"w")
-	fh.close()
-	print "Searching", loc_name, "..."
-	latlong = gmaps.geocode(loc_name)
+	findBusinesses.businessSearch(loc_name,keyword)
+	loc_name=loc_file.readline()
 
-	latitude = latlong[0]['geometry']['location']['lat']
-	longitude = latlong[0]['geometry']['location']['lng']
 
-	print "(", latitude, " ", longitude, ")"
-
-	places_list = gmaps.places_radar([latitude,longitude],1000,type=['establishment'],keyword=key)
-
-	num_places = len(places_list['results'])
-	print num_places, "locations found."
-	count=1
-	for x in range(0,num_places):
-		if count%10==0:
-			print count, "/", num_places
-		current_id = places_list['results'][x]['place_id']
-		deets = gmaps.place(current_id)
-		if 'establishment' in deets['result']['types']:
-			if 'website' in deets['result']:
-				fp="websites/"
-				fp+=loc_name
-				fh = open(fp,"a")
-				fh.write(deets['result']['website'])
-				fh.write("\n")
-				fh.close()
-		time.sleep(0.11)
-		count+=1
-	loc_name=ifh.readline()
