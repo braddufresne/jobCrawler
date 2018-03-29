@@ -28,6 +28,6 @@ def businessSearch(loc_name, search_term, job_key, threads):
 		deets = gmaps.place(current_id)
 		if 'establishment' in deets['result']['types']:
 			if 'website' in deets['result']:
-				findJobs.webCrawl(deets['results']['website'],job_key,loc_name, threads)
+				findJobs.webCrawl(deets['result']['website'],job_key,loc_name, threads)
 		time.sleep(0.11)
 		count+=1

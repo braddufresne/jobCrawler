@@ -18,7 +18,7 @@ def saveCareers(link,key,loc):
 	outfile.write("\n")
 	outfile.close()
 
-def checkListing(link, keyword):
+def checkListing(link, keyword,loc):
 	try:
 		print "career page found at", link
 		html = urllib.urlopen(link).read() 
